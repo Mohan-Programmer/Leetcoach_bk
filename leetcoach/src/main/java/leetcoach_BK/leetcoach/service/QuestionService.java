@@ -4,7 +4,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import leetcoach_BK.leetcoach.model.Questions;
-import leetcoach_BK.leetcoach.model.QuestionTitleProjection;
 import leetcoach_BK.leetcoach.repositry.QuestionsRepo;
 
 @Service
@@ -43,7 +42,4 @@ public List<Questions> difQuestions(String difficult)
 {
     return questionsRepo.findByDifficulty(difficult);
 }
- public List<QuestionTitleProjection> getAllTitles() {
-        return questionsRepo.findAllBy();
-    }
 }

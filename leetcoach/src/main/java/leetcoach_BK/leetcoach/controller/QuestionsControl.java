@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import leetcoach_BK.leetcoach.model.QuestionTitleProjection;
 import leetcoach_BK.leetcoach.model.Questions;
 import leetcoach_BK.leetcoach.service.QuestionService;
 
@@ -19,11 +17,6 @@ private final QuestionService questionService;
 public QuestionsControl(QuestionService questionService)
 {
     this.questionService=questionService;
-}
-@GetMapping("/questions/titles")
-public List<QuestionTitleProjection> getTitles()
-{
-    return questionService.getAllTitles();
 }
 
 @GetMapping("/questions")

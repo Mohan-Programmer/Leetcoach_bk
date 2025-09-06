@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collation = "questions")
+@Document(collection = "questions")
 public class Questions {
 
     @Id

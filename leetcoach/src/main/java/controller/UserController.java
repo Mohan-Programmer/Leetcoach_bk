@@ -5,18 +5,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import service.AuthService;
+import service.UserService;
 
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class UserController {
 
 
-    private AuthService authService;
+    private final UserService userService;
 
-   public AuthController(AuthService authService){
-            this.authService=authService;
+   public UserController(UserService userService){
+            this.userService=userService;
    }
 
 //end point for signup
@@ -28,13 +28,13 @@ public String signup(@RequestParam String FirstName,
                      @RequestParam String Role)
 {
 
-    return authService.signup(FirstName, LastName, UserName, Password, Role);
+    return userService.signup(FirstName, LastName, UserName, Password, Role);
 }
 
 
 //end ponit for login
 @PostMapping("login")
 public String login(@RequestParam String UserName,@RequestParam String Password){
-    return authService.login(UserName, Password);
+    return userService.login(UserName, Password);
 }
 }

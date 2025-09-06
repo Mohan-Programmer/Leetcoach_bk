@@ -7,12 +7,12 @@ import model.Users;
 import repositry.UserRepository;
 
 @Service
-public class AuthService {
+public class UserService {
 
-    private  UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-   public AuthService(UserRepository userRepository,PasswordEncoder passwordEncoder)
+   public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)
    {
             this.userRepository=userRepository;
             this.passwordEncoder=passwordEncoder;

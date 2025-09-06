@@ -33,6 +33,12 @@ public Questions byId(String Id)
     return questionsRepo.findById(Id).orElseThrow(()-> new RuntimeException("The qution id is invalid!"+Id));
 
 }
+
+public List<Questions> getByTags(String tag)
+{
+
+    return questionsRepo.findByTag(tag);
+}
 public List<Questions> difQuestions(String difficult)
 {
     return questionsRepo.findByDifficulty(difficult);

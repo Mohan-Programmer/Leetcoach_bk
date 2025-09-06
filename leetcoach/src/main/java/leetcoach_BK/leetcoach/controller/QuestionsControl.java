@@ -36,6 +36,13 @@ public List<Questions> bytoppic(@PathVariable String topic)
 {
     return questionService.byTopic(topic);
 }
+
+@GetMapping("/questions/tag/{tag}")
+public List<Questions> getBytag(@PathVariable String tag)
+{
+return questionService.getByTags(tag);
+}
+
 @GetMapping("/questions/id/{id}")
 public Questions byQuestionsId(@PathVariable String id)
 {

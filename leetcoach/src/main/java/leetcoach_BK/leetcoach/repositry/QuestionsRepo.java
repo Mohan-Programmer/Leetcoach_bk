@@ -1,15 +1,12 @@
-package repositry;
+package leetcoach_BK.leetcoach.repositry;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-
-import model.Questions;
+import leetcoach_BK.leetcoach.model.Questions;
 
 public interface QuestionsRepo extends MongoRepository<Questions,String>{
-   List<Questions> findByTopic(String topic);
-   Optional<Questions> findById(String Id);
+   List<Questions> findByTopics(String topic);
 
 }

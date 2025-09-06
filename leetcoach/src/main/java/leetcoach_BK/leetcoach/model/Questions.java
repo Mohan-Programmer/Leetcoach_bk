@@ -1,4 +1,4 @@
-package model;
+package leetcoach_BK.leetcoach.model;
 
 
 import java.util.List;

@@ -1,9 +1,10 @@
-package service;
+package leetcoach_BK.leetcoach.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-import model.Questions;
-import repositry.QuestionsRepo;
+
+import leetcoach_BK.leetcoach.model.Questions;
+import leetcoach_BK.leetcoach.repositry.QuestionsRepo;
 
 @Service
 public class QuestionService {
@@ -22,7 +23,7 @@ public List<Questions> allQuestions(){
 
 public List<Questions> byTopic(String topic)
 {
-    return  questionsRepo.findByTopic(topic);
+    return  questionsRepo.findByTopics(topic);
 }
 
 public Questions byId(String Id)

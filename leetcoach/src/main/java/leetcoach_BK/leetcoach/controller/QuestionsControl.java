@@ -1,4 +1,4 @@
-package controller;
+package leetcoach_BK.leetcoach.controller;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import model.Questions;
-import service.QuestionService;
+import leetcoach_BK.leetcoach.model.Questions;
+import leetcoach_BK.leetcoach.service.QuestionService;
 
 @RestController
 public class QuestionsControl {
@@ -24,15 +24,15 @@ public List<Questions> questions(){
     return questionService.allQuestions();
 }
 
-@GetMapping("/questions/{topic}")
+@GetMapping("/questions/topic/{topic}")
 public List<Questions> bytoppic(@PathVariable String topic)
 {
     return questionService.byTopic(topic);
 }
-@GetMapping("/qustions/{Id}")
-public Questions byQuestionsId(@PathVariable String Id)
+@GetMapping("/questions/id/{id}")
+public Questions byQuestionsId(@PathVariable String id)
 {
-    return questionService.byId(Id);
+    return questionService.byId(id);
 }
 
 }

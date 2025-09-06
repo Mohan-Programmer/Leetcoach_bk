@@ -28,5 +28,9 @@ public class UserSubmissionService {
       return userSubmissionRepo.save(submission);   
  }
 
+ public List<UserSubmission> getAllSub()
+ {
+    return userSubmissionRepo.findAll();
+ }
 
 }

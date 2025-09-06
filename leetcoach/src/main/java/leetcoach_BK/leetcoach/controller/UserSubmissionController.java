@@ -34,5 +34,10 @@ public UserSubmission saveCode(@RequestBody UserSubmission submission)
 
 }
 
+@GetMapping("/subquestion")
+public List<UserSubmission> getAllSubcode()
+{
+    return userSubmissionService.getAllSub();
+}
 
 }

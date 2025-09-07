@@ -13,20 +13,18 @@ import lombok.Setter;
 @Document(collection = "usersubmission")
 public class UserSubmission {
 
-private String userId;   // to connect question with user id
-private String questionId; 
-private String language; //programming language
-private String code; //user answer code
-private boolean isCorrect;  // the code is correct or not
-private String status; //accept,reject,wrong
-private double runtime;
-private double memory;
-private LocalDateTime submittedAt;
+    private String userId; // to connect question with user id
+    private String questionId;
+    private String language; // programming language
+    private String code; // user answer code
+    private boolean isCorrect; // the code is correct or not
+    private String status; // accept,reject,wrong
+    private double runtime;
+    private double memory;
+    private LocalDateTime submittedAt;
 
-
-
- public UserSubmission(String userId, String questionId, String code, String language,
-                      boolean isCorrect, String status, double runtime, double memory) {
+    public UserSubmission(String userId, String questionId, String code, String language,
+            boolean isCorrect, String status, double runtime, double memory) {
         this.userId = userId;
         this.questionId = questionId;
         this.code = code; // ✅ Stores the full code
@@ -37,6 +35,5 @@ private LocalDateTime submittedAt;
         this.memory = memory;
         this.submittedAt = LocalDateTime.now();
     }
-
 
 }

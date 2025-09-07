@@ -12,7 +12,7 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -20,12 +20,11 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<Map<String, String>> signup(@RequestBody Map<String, String> request) {
         String message = userService.signup(
-            request.get("firstName"),
-            request.get("lastName"),
-            request.get("userName"),
-            request.get("password"),
-            request.get("role")
-        );
+                request.get("firstName"),
+                request.get("lastName"),
+                request.get("userName"),
+                request.get("password"),
+                request.get("role"));
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", message));
     }
 
@@ -33,9 +32,8 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
         String message = userService.login(
-            request.get("userName"),
-            request.get("password")
-        );
+                request.get("userName"),
+                request.get("password"));
         return ResponseEntity.ok(Map.of("message", message));
     }
 }

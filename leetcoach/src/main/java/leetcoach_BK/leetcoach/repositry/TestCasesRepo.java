@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-
 import leetcoach_BK.leetcoach.model.TestCases;
 
 public interface TestCasesRepo extends MongoRepository<TestCases, String> {

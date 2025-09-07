@@ -14,14 +14,13 @@ public class TestCasesController {
 
     private final TestCasesService testCasesService;
 
-    public TestCasesController(TestCasesService testCasesService){
+    public TestCasesController(TestCasesService testCasesService) {
 
-        this.testCasesService=testCasesService;
+        this.testCasesService = testCasesService;
     }
 
     @GetMapping("/testcases/{questionid}")
-    public List<TestCases> getTestCases(@PathVariable String questionid)
-    {
+    public List<TestCases> getTestCases(@PathVariable String questionid) {
 
         return testCasesService.getByQuestionId(questionid);
     }

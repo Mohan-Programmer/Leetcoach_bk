@@ -10,15 +10,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection="testcases")
+@Document(collection = "testcases")
 public class TestCases {
 
- @Id
+    @Id
     private String id; // MongoDB document ID
 
     private String questionId; // Link to your question

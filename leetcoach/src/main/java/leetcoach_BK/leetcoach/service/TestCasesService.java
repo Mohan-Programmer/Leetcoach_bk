@@ -11,14 +11,12 @@ import leetcoach_BK.leetcoach.repositry.TestCasesRepo;
 public class TestCasesService {
     private final TestCasesRepo testCasesRepo;
 
-    public TestCasesService(TestCasesRepo testCasesRepo){
+    public TestCasesService(TestCasesRepo testCasesRepo) {
 
-        this.testCasesRepo=testCasesRepo;
+        this.testCasesRepo = testCasesRepo;
     }
 
-
-    public List<TestCases> getByQuestionId(String questionId)
-    {
+    public List<TestCases> getByQuestionId(String questionId) {
         return testCasesRepo.findByQuestionId(questionId);
     }
 

@@ -12,7 +12,6 @@ import lombok.Setter;
 
 public class TestCase {
 
-
     private String input;
     private String expectedOutput;
 

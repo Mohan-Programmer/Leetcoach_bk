@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import leetcoach_BK.leetcoach.model.EvaluationResult;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,20 +84,4 @@ public class JDoodleService {
         return new EvaluationResult(isCorrect, cpuTime, memory, output);
     }
 
-    /**
-     * Result holder class
-     */
-    public static class EvaluationResult {
-        public boolean isCorrect;
-        public double runtime;
-        public double memory;
-        public String output;
-
-        public EvaluationResult(boolean isCorrect, double runtime, double memory, String output) {
-            this.isCorrect = isCorrect;
-            this.runtime = runtime;
-            this.memory = memory;
-            this.output = output;
-        }
-    }
 }

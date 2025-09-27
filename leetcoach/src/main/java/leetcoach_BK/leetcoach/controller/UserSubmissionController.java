@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
+import leetcoach_BK.leetcoach.dto.SubmissionRequest;
 import leetcoach_BK.leetcoach.model.UserSubmission;
 import leetcoach_BK.leetcoach.service.UserSubmissionService;
 
@@ -24,11 +25,17 @@ public class UserSubmissionController {
         return userSubmissionService.getByQuestion(userId, questionId);
     }
 
-    // Save submission with multi-test-case JDoodle evaluation
+    // Save submission with multi-test-case JDoodle evaluation + AI feedback
     @PostMapping("/submit")
     public UserSubmission saveCode(@RequestBody SubmissionRequest request) {
         UserSubmission submission = request.toUserSubmission();
-        return userSubmissionService.saveAnswer(submission, request.getInputs(), request.getExpectedOutputs());
+        // Pass the problem statement for AI feedback
+        return userSubmissionService.saveAnswer(
+                submission,
+                request.getInputs(),
+                request.getExpectedOutputs(),
+                request.getProblemStatement()
+        );
     }
 
     // Get all submissions
@@ -41,42 +48,5 @@ public class UserSubmissionController {
     @GetMapping("/solved/{userid}")
     public List<String> getAllSolvedId(@PathVariable String userid) {
         return userSubmissionService.getSolvedQuestionIds(userid);
-    }
-
-    // ---------------- SubmissionRequest DTO ----------------
-    public static class SubmissionRequest {
-        private String userId;
-        private String questionId;
-        private String language;
-        private String code;
-        private List<String> inputs;           // multiple test case inputs
-        private List<String> expectedOutputs;  // multiple expected outputs
-
-        // Convert DTO to UserSubmission
-        public UserSubmission toUserSubmission() {
-            return new UserSubmission(
-                    userId,
-                    questionId,
-                    code,
-                    language,
-                    false,
-                    "Pending",
-                    0, 0
-            );
-        }
-
-        // Getters and setters
-        public String getUserId() { return userId; }
-        public void setUserId(String userId) { this.userId = userId; }
-        public String getQuestionId() { return questionId; }
-        public void setQuestionId(String questionId) { this.questionId = questionId; }
-        public String getLanguage() { return language; }
-        public void setLanguage(String language) { this.language = language; }
-        public String getCode() { return code; }
-        public void setCode(String code) { this.code = code; }
-        public List<String> getInputs() { return inputs; }
-        public void setInputs(List<String> inputs) { this.inputs = inputs; }
-        public List<String> getExpectedOutputs() { return expectedOutputs; }
-        public void setExpectedOutputs(List<String> expectedOutputs) { this.expectedOutputs = expectedOutputs; }
     }
 }

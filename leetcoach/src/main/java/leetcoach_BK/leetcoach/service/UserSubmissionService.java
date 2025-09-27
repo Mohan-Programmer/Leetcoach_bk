@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import leetcoach_BK.leetcoach.model.EvaluationResult;
 import leetcoach_BK.leetcoach.model.UserSubmission;
 import leetcoach_BK.leetcoach.repositry.UserSubmissionRepo;
 
@@ -14,10 +15,12 @@ public class UserSubmissionService {
 
     private final UserSubmissionRepo userSubmissionRepo;
     private final JDoodleService jdoodleService;
+    private final AIService aiService;
 
-    public UserSubmissionService(UserSubmissionRepo userSubmissionRepo, JDoodleService jdoodleService) {
+    public UserSubmissionService(UserSubmissionRepo userSubmissionRepo, JDoodleService jdoodleService, AIService aiService) {
         this.userSubmissionRepo = userSubmissionRepo;
         this.jdoodleService = jdoodleService;
+        this.aiService = aiService;
     }
 
     // Get a submitted code for an individual question
@@ -26,37 +29,46 @@ public class UserSubmissionService {
     }
 
     /**
-     * Save or update a user submission with multi-test-case evaluation
+     * Save or update a user submission with multi-test-case evaluation and AI feedback
      *
-     * @param submission UserSubmission object
-     * @param inputs List of inputs
-     * @param expectedOutputs List of expected outputs
-     * @return Saved UserSubmission with evaluation results
+     * @param submission      UserSubmission object
+     * @param inputs          List of inputs for test cases
+     * @param expectedOutputs List of expected outputs for test cases
+     * @param problemStatement The text of the problem/question
+     * @return Saved UserSubmission with evaluation results and AI feedback
      */
-    public UserSubmission saveAnswer(UserSubmission submission, List<String> inputs, List<String> expectedOutputs) {
+    public UserSubmission saveAnswer(UserSubmission submission, List<String> inputs, List<String> expectedOutputs, String problemStatement) {
         // 1. Evaluate using JDoodle for all test cases
-        JDoodleService.EvaluationResult result = jdoodleService.evaluate(
+        EvaluationResult result = jdoodleService.evaluate(
                 submission.getCode(),
                 submission.getLanguage(),
                 inputs,
                 expectedOutputs
         );
 
-        // 2. Update submission fields based on evaluation
+        // 2. Update submission fields based on JDoodle evaluation
         submission.setCorrect(result.isCorrect);
         submission.setStatus(result.isCorrect ? "Accepted" : "Wrong");
         submission.setRuntime(result.runtime);
         submission.setMemory(result.memory);
         submission.setSubmittedAt(LocalDateTime.now());
 
-        // 3. Check if submission already exists
+        // 3. Generate AI feedback
+        String aiFeedback = aiService.getCodeFeedback(
+                submission.getCode(),
+                submission.getLanguage(),
+                problemStatement,
+                result.isCorrect
+        );
+        submission.setAifeedback(aiFeedback);
+
+        // 4. Save or update submission in DB
         Optional<UserSubmission> existing = userSubmissionRepo.findByUserIdAndQuestionId(
                 submission.getUserId(),
                 submission.getQuestionId()
         );
 
         if (existing.isPresent()) {
-            // Update the existing submission
             UserSubmission old = existing.get();
             old.setCode(submission.getCode());
             old.setStatus(submission.getStatus());
@@ -65,9 +77,9 @@ public class UserSubmissionService {
             old.setMemory(submission.getMemory());
             old.setSubmittedAt(submission.getSubmittedAt());
             old.setLanguage(submission.getLanguage());
+            old.setAifeedback(submission.getAifeedback());
             return userSubmissionRepo.save(old);
         } else {
-            // Save new submission
             return userSubmissionRepo.save(submission);
         }
     }

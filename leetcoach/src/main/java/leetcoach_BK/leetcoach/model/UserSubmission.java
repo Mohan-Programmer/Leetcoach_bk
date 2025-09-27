@@ -1,7 +1,6 @@
 package leetcoach_BK.leetcoach.model;
 
 import java.time.LocalDateTime;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +20,7 @@ public class UserSubmission {
     private String status; // accept,reject,wrong
     private double runtime;
     private double memory;
+    private String aifeedback;
     private LocalDateTime submittedAt;
 
     public UserSubmission(String userId, String questionId, String code, String language,

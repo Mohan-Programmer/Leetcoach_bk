@@ -1,7 +1,7 @@
 package leetcoach_BK.leetcoach.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -13,45 +13,71 @@ import leetcoach_BK.leetcoach.repositry.UserSubmissionRepo;
 public class UserSubmissionService {
 
     private final UserSubmissionRepo userSubmissionRepo;
+    private final JDoodleService jdoodleService;
 
-    public UserSubmissionService(UserSubmissionRepo userSubmissionRepo) {
+    public UserSubmissionService(UserSubmissionRepo userSubmissionRepo, JDoodleService jdoodleService) {
         this.userSubmissionRepo = userSubmissionRepo;
-
+        this.jdoodleService = jdoodleService;
     }
 
-    // to get a submitted code individual
-    public UserSubmission getByquestion(String userid, String question_id) {
-        return userSubmissionRepo.findByUserIdAndQuestionId(userid, question_id).orElse(null);
+    // Get a submitted code for an individual question
+    public UserSubmission getByQuestion(String userId, String questionId) {
+        return userSubmissionRepo.findByUserIdAndQuestionId(userId, questionId).orElse(null);
     }
 
-    // to save the user submission
-    public UserSubmission saveAnswer(UserSubmission submission) {
+    /**
+     * Save or update a user submission with multi-test-case evaluation
+     *
+     * @param submission UserSubmission object
+     * @param inputs List of inputs
+     * @param expectedOutputs List of expected outputs
+     * @return Saved UserSubmission with evaluation results
+     */
+    public UserSubmission saveAnswer(UserSubmission submission, List<String> inputs, List<String> expectedOutputs) {
+        // 1. Evaluate using JDoodle for all test cases
+        JDoodleService.EvaluationResult result = jdoodleService.evaluate(
+                submission.getCode(),
+                submission.getLanguage(),
+                inputs,
+                expectedOutputs
+        );
+
+        // 2. Update submission fields based on evaluation
+        submission.setCorrect(result.isCorrect);
+        submission.setStatus(result.isCorrect ? "Accepted" : "Wrong");
+        submission.setRuntime(result.runtime);
+        submission.setMemory(result.memory);
+        submission.setSubmittedAt(LocalDateTime.now());
+
+        // 3. Check if submission already exists
         Optional<UserSubmission> existing = userSubmissionRepo.findByUserIdAndQuestionId(
                 submission.getUserId(),
-                submission.getQuestionId());
+                submission.getQuestionId()
+        );
 
         if (existing.isPresent()) {
             // Update the existing submission
-            UserSubmission oldSubmission = existing.get();
-            oldSubmission.setCode(submission.getCode()); // Update code
-            oldSubmission.setStatus(submission.getStatus()); // Update status
-            oldSubmission.setSubmittedAt(submission.getSubmittedAt()); // Update timestamp if you have it
-            oldSubmission.setLanguage(submission.getLanguage());
-            oldSubmission.setMemory(submission.getMemory());
-            oldSubmission.setRuntime(submission.getRuntime());
-            return userSubmissionRepo.save(oldSubmission);
+            UserSubmission old = existing.get();
+            old.setCode(submission.getCode());
+            old.setStatus(submission.getStatus());
+            old.setCorrect(submission.isCorrect());
+            old.setRuntime(submission.getRuntime());
+            old.setMemory(submission.getMemory());
+            old.setSubmittedAt(submission.getSubmittedAt());
+            old.setLanguage(submission.getLanguage());
+            return userSubmissionRepo.save(old);
         } else {
-            // Save a new one
+            // Save new submission
             return userSubmissionRepo.save(submission);
         }
     }
 
-    // to get all submitted code
+    // Get all submitted code
     public List<UserSubmission> getAllSub() {
         return userSubmissionRepo.findAll();
     }
 
-    // to get a solved question id's
+    // Get solved question IDs for a user
     public List<String> getSolvedQuestionIds(String userId) {
         return userSubmissionRepo.findByUserId(userId).stream()
                 .filter(sub -> sub.isCorrect() || "Accepted".equalsIgnoreCase(sub.getStatus()))

@@ -18,16 +18,16 @@ import lombok.Setter;
 @Document(collection = "questions")
 public class Questions {
 
-    @Id
-    private String question_id;
+     @Id
+    private String id;  // MongoDB _id
 
     private String title;
     private String description;
     private String difficulty;
     private List<String> topics;
     private List<String> constraints;
-    private List<Map<String, String>> examples; // each example has input & output
-    private Map<String, String> solutions; // code, language, explanation
+    private List<Map<String, String>> examples;
+    private Map<String, String> solutions;
     private List<String> hints;
     private List<String> tag;
 

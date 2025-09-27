@@ -21,7 +21,7 @@ public class QuestionService {
     }
 
     public List<Questions> byTopic(String topic) {
-        return questionsRepo.findByTopics(topic);
+        return questionsRepo.findByTopicsContaining(topic);
     }
 
     public Questions byId(String Id) {
@@ -32,7 +32,7 @@ public class QuestionService {
 
     public List<Questions> getByTags(String tag) {
 
-        return questionsRepo.findByTag(tag);
+        return questionsRepo.findByTagContaining(tag);
     }
 
     public List<Questions> difQuestions(String difficult) {
